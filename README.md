@@ -7,12 +7,15 @@
 # Before Start
 
 
-#### The Arch is a CAShapeLayer added to a ViewController and needs two UIView's Rect as reference. The first one is where the arch will be placed for the first time. The second one is the target view where the arch needs to go. 
+#### The Arch is a CAShapeLayer and has to be added inside the viewcontroller's layer. In the init of BellaArch you need to pass the rect where it will born. after that you add the arch to the viewcontroller's layer keeping the reference it.
 
 
+Inside the BellaArch layer there is a method called  [Execute]
 Animate the layer to target calling  .execute(action: .startAnimation)
 
-> Import BellaArch inside the document as package 
+By Steps : 
+
+> Import BellaArch inside the document as module 
 > Create [BellaArch]  CAShape Layer
 > Inside the init BellaArch you have to pass the rect where you want the layer to born. 
 > keep the reference of the layer
@@ -21,7 +24,7 @@ Animate the layer to target calling  .execute(action: .startAnimation)
 ---------------------------------------
 
 
-# Methods to call 
+# Methods to call Inside Execute
 
 
 showLine          # (Presents the layer inside the View) 
