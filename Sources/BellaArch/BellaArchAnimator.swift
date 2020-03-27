@@ -1,6 +1,6 @@
 //
 //  File.swift
-//  
+//
 //
 //  Created by Felipe Fernandes on 11/03/2020.
 //
@@ -11,7 +11,8 @@ import UIKit
 struct ArchMotorAnimation {
 
     func showLine   ( line: BellaArch, action: BellaArchActions ) {
-
+        if line.isRunningAnimation { return }
+           line.isRunningAnimation = true
         guard case .showLine( _, let time) = action else {return}
 
             let height = line.frame.height
@@ -30,6 +31,7 @@ struct ArchMotorAnimation {
             CATransaction.setCompletionBlock { [weak line] in
                 guard let line = line else {return}
                 line.bellaArchDelegate?.didFinishEntrance()
+                line.isRunningAnimation = false
             }
 
             gradient.add(heightAnimation, forKey: "height")
@@ -105,7 +107,7 @@ struct ArchMotorAnimation {
         let endAnimation = CABasicAnimation(keyPath: "strokeEnd")
         endAnimation.fromValue = 0.025 // CHECK
         endAnimation.toValue = 1
-        endAnimation.duration =  CFTimeInterval(time - (time / 2))
+        endAnimation.duration =  CFTimeInterval(time - (time / 2.5))
 
         let strokeAnimation = CAAnimationGroup()
         strokeAnimation.animations = [startAnimation, endAnimation]
@@ -120,32 +122,34 @@ struct ArchMotorAnimation {
         line.add(strokeAnimation, forKey: "Stroke")
         CATransaction.commit()
 
+        line.presentation()?.backgroundColor = UIColor.red.cgColor
+        line.presentation()?.fillColor = UIColor.green.cgColor
 
         let delay : Double = Double(time / 1.5)
 
 
         if #available(iOS 10.0, *) {
             Timer.scheduledTimer(withTimeInterval: delay, repeats: false) { [weak line] (progress) in
-                
+
                 let arch = BellaArch(rect: target)
                 line?.superlayer?.addSublayer(arch)
                 arch.execute(action: .showLine(direction: direction, time: raiseWithTime))
                 line?.bellaArchDelegate?.finishingPath()
-                
+
                 let opacity = CABasicAnimation(keyPath: "opacity")
                 opacity.fromValue = 1
                 opacity.toValue = 0
                 opacity.duration = CFTimeInterval(time / 2)
-                
+                line?.opacity = 0
+
                 CATransaction.setCompletionBlock {
                     line?.path = nil
                     line?.bellaArchDelegate?.didFinishPath()
                     line?.bellaArchDelegate?.updateNewLocation(arch: arch)
                     line?.isRunningAnimation = false
                     line?.removeFromSuperlayer()
-                    
                 }
-                
+
                 line?.add(opacity, forKey: "opacity")
                 CATransaction.commit()
             }

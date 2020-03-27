@@ -1,6 +1,6 @@
 //
 //  File.swift
-//  
+//
 //
 //  Created by Felipe Fernandes on 11/03/2020.
 //
@@ -47,10 +47,12 @@ struct FactoryOfArch  {
         let arch = UIBezierPath()
         let bornPoint = layer.frame
         let height = layer.frame.height
+        let bottom = height / 5
+
 
         // USED TO GIVE DEEPNESS TO THE ARCH
 
-        let depthRate: CGFloat = 2
+        let depthRate: CGFloat = 1.2
         let constantDepth: CGFloat = 100
 
         // DISTANCE BETWEEN START VIEW AND TARGET VIEW
@@ -83,7 +85,7 @@ struct FactoryOfArch  {
 
             case .down:
                 // SAME F LOGIC
-                keyStone = bornPoint.maxY > target.maxY ? constantDepth : converted.maxY
+                keyStone = bornPoint.minY > target.maxY ? height : converted.maxY
 
                 arch.move     (to: CGPoint(x: .zero, y: height / 2 ))
                 arch.addLine  (to: CGPoint(x: .zero, y:  keyStone))
@@ -91,7 +93,7 @@ struct FactoryOfArch  {
                               controlPoint1: CGPoint(x: .zero,    y: height + keyStone * depthRate),
                               controlPoint2: CGPoint(x: distance, y: height + keyStone * depthRate))
 
-                arch.addLine(to: CGPoint(x: distance, y: converted.midY))
+                arch.addLine(to: CGPoint(x: distance, y: converted.maxY - bottom))
 
         }
 

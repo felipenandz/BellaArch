@@ -3,11 +3,15 @@ import Foundation
 
 public protocol BellaArchDelegate: class {
 
+    var bellaArch: BellaArch! { get set }
+
+    func setupArch (rect: CGRect)
     func didFinishEntrance ()
     func didRemoveLine ()
     func didFinishPath ()
     func finishingPath ()
     func updateNewLocation (arch: BellaArch)
+
 }
 
 
@@ -130,3 +134,4 @@ extension CGFloat {
         return -self
     }
 }
+
